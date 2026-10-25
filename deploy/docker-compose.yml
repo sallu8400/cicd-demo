@@ -1,0 +1,26 @@
+# Ek hi compose file staging aur production dono ke liye.
+# Fark sirf environment variables ka hai, jo Jenkins deploy ke time deta hai:
+#
+#   staging:    APP_ENV=staging    WEB_PORT=3100  -> project naam: cicd-demo-staging
+#   production: APP_ENV=production WEB_PORT=3200  -> project naam: cicd-demo-prod
+#
+# Real company mein staging aur production alag servers hote hain.
+# Is demo mein dono ek hi machine par alag ports par chalte hain.
+
+services:
+  api:
+    build: ../api
+    image: cicd-demo-api:${APP_ENV:-local}
+    environment:
+      APP_ENV: ${APP_ENV:-local}
+      APP_VERSION: ${APP_VERSION:-dev}
+    restart: unless-stopped
+
+  web:
+    build: ../frontend
+    image: cicd-demo-web:${APP_ENV:-local}
+    ports:
+      - "${WEB_PORT:-3000}:80"
+    depends_on:
+      - api
+    restart: unless-stopped

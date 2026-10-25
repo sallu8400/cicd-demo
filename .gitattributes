@@ -1,0 +1,2 @@
+# Sab text files LF line endings ke saath, taaki Linux (Jenkins/Docker) par shell scripts sahi chalein
+* text=auto eol=lf
